@@ -31,8 +31,24 @@ async function getCategoryIds() {
             count: 50,
         },
     });
-    console.log(res);
+    console.log('res:', res);
+    const data = res.data;
+    console.log('data:', data);
+    const shuffledData = _.shuffle(data);
+    console.log('shuffledData:', shuffledData);
+    const sixCats = shuffledData.splice(0, 6);
+    console.log(sixCats);
+    // if (Array.isArray(data) && typeof data[0] === 'object') {
+    //     console.log('Data is an array of objects');
+    // } else {
+    //     console.log('Data is not an array of objects');
+    // }
+    // const arr = res.data.map((item) => {
+    //     return item;
+    // });
+    // console.log(arr);
 }
+getCategoryIds();
 
 /** Return object with data about a category:
  *
