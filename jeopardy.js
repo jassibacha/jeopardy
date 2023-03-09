@@ -38,6 +38,8 @@ async function getCategoryIds() {
     console.log('shuffledData:', shuffledData);
     const sixCats = shuffledData.splice(0, 6);
     console.log(sixCats);
+    const justID = sixCats.map((cat) => cat.id);
+    console.log(justID);
     // if (Array.isArray(data) && typeof data[0] === 'object') {
     //     console.log('Data is an array of objects');
     // } else {
