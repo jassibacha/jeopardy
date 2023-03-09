@@ -33,10 +33,12 @@ async function getCategoryIds() {
     });
 
     // shuffle the data array via lodash, splice it down to 6 items, map it to just id
-    const cats = _.shuffle(res.data)
-        .splice(0, 6)
-        .map((cat) => cat.id);
+    // const cats = _.shuffle(res.data)
+    //    .splice(0, 6)
+    //    .map((cat) => cat.id);
+    const cats = _.sampleSize(res.data, 6).map((cat) => cat.id);
     console.log('categories:', cats);
+    return cats;
 }
 getCategoryIds();
 
@@ -55,8 +57,16 @@ getCategoryIds();
 async function getCategory(catId) {
     const url = `http://jservice.io/api/category?id=${catId}`;
     const res = await axios.get(url);
-    console.log('getCategory res:', res.data);
-    return res.data;
+    console.log('getCategory data:', res.data);
+    const cluesOrig = _.sampleSize(res.data.clues, 5);
+    const clues = cluesOrig.map((clue) => ({
+        question: clue.question,
+        answer: clue.answer,
+        showing: null,
+    }));
+    console.log(clues);
+    console.log(res.data.title);
+    return { title: res.data.title, clues };
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
@@ -96,7 +106,17 @@ function hideLoadingView() {}
  * - create HTML table
  * */
 
-async function setupAndStart() {}
+async function setupAndStart() {
+    const catIds = await getCategoryIds();
+    categories = [];
+    //forEach wouldn't work here, weird.
+    for (let id of catIds) {
+        categories.push(await getCategory(id));
+    }
+    console.log('setup categories:', categories);
+
+    //fillTable();
+}
 
 /** On click of start / restart button, set up game. */
 
