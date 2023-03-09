@@ -18,6 +18,10 @@
 //    ...
 //  ]
 
+const NUM_CATEGORIES = 6;
+const NUM_QUESTIONS_PER_CAT = 5;
+const table = document.querySelector('#jeopardy');
+//console.log(table);
 let categories = [];
 
 /** Get NUM_CATEGORIES random category from API.
@@ -36,7 +40,7 @@ async function getCategoryIds() {
     // const cats = _.shuffle(res.data)
     //    .splice(0, 6)
     //    .map((cat) => cat.id);
-    const cats = _.sampleSize(res.data, 6).map((cat) => cat.id);
+    const cats = _.sampleSize(res.data, NUM_CATEGORIES).map((cat) => cat.id);
     console.log('categories:', cats);
     return cats;
 }
@@ -58,7 +62,7 @@ async function getCategory(catId) {
     const url = `http://jservice.io/api/category?id=${catId}`;
     const res = await axios.get(url);
     console.log('getCategory data:', res.data);
-    const cluesOrig = _.sampleSize(res.data.clues, 5);
+    const cluesOrig = _.sampleSize(res.data.clues, NUM_QUESTIONS_PER_CAT);
     const clues = cluesOrig.map((clue) => ({
         question: clue.question,
         answer: clue.answer,
@@ -77,8 +81,25 @@ async function getCategory(catId) {
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable() {}
+async function fillTable() {
+    //console.log('fillTable cats:', categories);
+    const $thead = $('<thead>');
+    const $tr = $('<tr>');
+    // for (let cat = 0; cat < NUM_CATEGORIES; cat++) {
+    //     const $td = $('<th>').text(categories[cat].title);
+    //     $tr.append($td);
+    //     //console.log(categories[cat].title);
+    // }
+    categories.forEach((cat) => {
+        const $th = $('<th>').text(cat.title);
+        $tr.append($th);
+    });
+    $thead.append($tr);
+    //$('#jeopardy thead').append($tr);
+    $('#jeopardy').append($thead);
 
+    // This works, now lets build the tbody
+}
 /** Handle clicking on a clue: show the question or answer.
  *
  * Uses .showing property on clue to determine what to show:
@@ -115,7 +136,7 @@ async function setupAndStart() {
     }
     console.log('setup categories:', categories);
 
-    //fillTable();
+    fillTable();
 }
 
 /** On click of start / restart button, set up game. */
