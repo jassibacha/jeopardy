@@ -31,24 +31,12 @@ async function getCategoryIds() {
             count: 50,
         },
     });
-    console.log('res:', res);
-    const data = res.data;
-    console.log('data:', data);
-    const shuffledData = _.shuffle(data);
-    console.log('shuffledData:', shuffledData);
-    const sixCats = shuffledData.splice(0, 6);
-    console.log(sixCats);
-    const justID = sixCats.map((cat) => cat.id);
-    console.log(justID);
-    // if (Array.isArray(data) && typeof data[0] === 'object') {
-    //     console.log('Data is an array of objects');
-    // } else {
-    //     console.log('Data is not an array of objects');
-    // }
-    // const arr = res.data.map((item) => {
-    //     return item;
-    // });
-    // console.log(arr);
+
+    // shuffle the data array via lodash, splice it down to 6 items, map it to just id
+    const cats = _.shuffle(res.data)
+        .splice(0, 6)
+        .map((cat) => cat.id);
+    console.log('categories:', cats);
 }
 getCategoryIds();
 
@@ -64,7 +52,12 @@ getCategoryIds();
  *   ]
  */
 
-function getCategory(catId) {}
+async function getCategory(catId) {
+    const url = `http://jservice.io/api/category?id=${catId}`;
+    const res = await axios.get(url);
+    console.log('getCategory res:', res.data);
+    return res.data;
+}
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
  *
