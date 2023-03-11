@@ -153,11 +153,11 @@ function handleClick(evt) {
         // console.log('Currently: null, make it showing question.');
         // console.log('this in clue', this);
         // console.log('evt in clue', evt);
-        $thisTd.text(clue.question);
+        $thisTd.html(clue.question);
         $thisTd.addClass('question');
         clue.showing = 'question';
     } else if (clue.showing === 'question') {
-        $thisTd.text(clue.answer);
+        $thisTd.html(clue.answer);
         clue.showing = 'answer';
         $thisTd.removeClass('question');
         $thisTd.addClass('answered');
